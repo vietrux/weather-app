@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thời tiết</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    pre{
+      background-color: black;
+      color: white;
+      padding: 10px;
+      font-family: monospace;
+    }
+    h1{
+      background-color: blanchedalmond;
+      padding-top: 0px;
+      margin: 0px;
+      color: black;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <p id="weather"></p>
+    <img id="icon" src="" alt="">
+  </div>
+  <pre>
+    <h1>Raw_data</h1>
+    <code id="info">
+    </code>
+  </pre>
+</body>
+<script>
+  async function getWeather(place, api_key) {
+    const res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${place}&units=metric&appid=${api_key}&lang=vi`)
+    return res.data
+  }
+  async function main() {
+    const api_key = '62841c9fd78f4f0c1a6cc542345b7c5d' //lấy api_key tại https://openweathermap.org/
+    const place = 'Hanoi'
+    const weather = await getWeather(place, api_key)
+    document.getElementById('info').innerHTML = JSON.stringify(weather, null, 2)
+    document.getElementById('icon').src = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/${weather.weather[0].icon}.svg`
+    document.getElementById('weather').innerHTML = `Thời tiết tại ${weather.name} là ${weather.weather[0].description} với nhiệt độ là ${weather.main.temp} độ C`
+  }
+  main()
+</script>
+
+</html>
